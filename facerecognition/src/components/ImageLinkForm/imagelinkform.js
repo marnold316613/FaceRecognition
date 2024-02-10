@@ -5,15 +5,15 @@ const ImageLinkForm = ({onInputChange, onSubmit, onCopyPasteInput} ) => {
 
   const buttonClick = async (event) =>{
     try {
-        console.log('just a test');
+       // console.log('just a test');
         const text = await navigator.clipboard.readText();
       
-        console.log('imagelinkform',text);
+       // console.log('imagelinkform',text);
         document.getElementById('inputImageURL').value = text;
         
         onCopyPasteInput(text);
       } catch (error) {
-        console.log('just a test');
+      //  console.log('just a test');
       }
   }
 
