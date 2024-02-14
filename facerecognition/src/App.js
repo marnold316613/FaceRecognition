@@ -5,7 +5,7 @@ import ImageLinkForm from './components/ImageLinkForm/imagelinkform';
 import Rank from './components/Rank/Rank';
 import FaceRecognitionComponent from './components/FaceRecognitionComponent/facerecognitioncomponent';
 import ParticlesBg from 'particles-bg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SignIn from './components/SignIn/SignIn';
 import Register from './components/Register/Register';
 
@@ -16,6 +16,13 @@ function App() {
   const [box,setBox] = useState([{}]);
   const [route,setRoute] = useState('signIn');
   const [isSignedIn,setIsSignedIn]=useState(false);
+  const [user ,setUser] = useState({ 
+                                    id:"",
+                                    name: "",
+                                    email: "",
+                                    entries: 0,
+                                    joined: ""})
+
   const PAT = '65c8452fcbcb43e69dfa5cc7b92133b0';
   // Specify the correct user_id/app_id pairings
   // Since you're making inferences outside your app's scope
@@ -26,6 +33,23 @@ function App() {
   const MODEL_VERSION_ID = '6dc7e46bc9124c5c8824be4822abe105';    
 //  let IMAGE_URL = 'https://samples.clarifai.com/metro-north.jpg';
 
+const loadUser = (data) => {
+  console.log('load user', data);
+setUser({id: data.id,
+  name:data.name,
+  email: data.email,
+  entries: data.entries,
+  joined: data.joined
+
+});
+console.log('user loaded', user)
+}
+
+useEffect(() => {
+  // fetch('http://localhost:3000')
+  // .then(response => response.json())
+  // .then(console.log);
+},[]);
 
 
 const clarifaiSetup = (url) => {
@@ -121,6 +145,21 @@ const  getAIAttributesForImage = async () => {
     fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", clarifaiSetup(input))
     .then(response => {
       if (response.ok) {
+        fetch('http://localhost:3000/image', {
+          method: 'put',
+          headers: { 'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            id: user.id
+        })}).then(async response =>  {
+          if (response.ok)
+          {
+            
+            const data = await response.json();
+               setUser({...user,
+                entries: data               
+                })             
+            }
+          })
         return response.json();
       }
       else {
@@ -172,16 +211,15 @@ const onRouteChange = (route) => {
       <div>
       <Navigation isSignedIn={isSignedIn} onRouteChange={onRouteChange} />
       <Logo />
-      <Rank />
+      <Rank userName={user.name} userEntries={user.entries} />
       <ImageLinkForm onInputChange={onInputChange} onSubmit={onSubmit} onCopyPasteInput={onCopyPasteInput} />
       <FaceRecognitionComponent imageLoaded={onImageLoaded} box={box} imageSource={imageUrl} />
-      </div>
-      : (route === 'signIn' ?
-      <SignIn onRouteChange={onRouteChange} />
+      </div> 
+      : (route === 'signIn') ?
+      <SignIn loadUser={loadUser} onRouteChange={onRouteChange} />
       :
       <Register onRouteChange={onRouteChange} />
-      )
-  }
+      }
     
     </div>
   );

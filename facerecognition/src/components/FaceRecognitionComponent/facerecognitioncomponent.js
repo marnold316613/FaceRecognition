@@ -3,7 +3,6 @@ import './facerecognitioncomponent.css'
 import FaceBox from './FaceBox';
 
 const FaceRecognitionComponent = ({imageSource, box, imageLoaded}) => {
-    console.log('fr',box);
     if (!box || typeof box ==='undefined' || typeof box.length === 'undefined' || box === null || box.length === 0)
     {
         return (
