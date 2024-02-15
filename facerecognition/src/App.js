@@ -23,18 +23,27 @@ function App() {
                                     entries: 0,
                                     joined: ""})
 
-  const PAT = '65c8452fcbcb43e69dfa5cc7b92133b0';
-  // Specify the correct user_id/app_id pairings
-  // Since you're making inferences outside your app's scope
-  const USER_ID = 'marnold316613';       
-  const APP_ID = 'my-first-application-2c1uk';
-  // Change these to whatever model and image URL you want to use
-  const MODEL_ID = 'face-detection';
-  const MODEL_VERSION_ID = '6dc7e46bc9124c5c8824be4822abe105';    
+const resetState = () => {
+  setInput('');
+  setLastImage('');
+  setImageUrl('');
+  setBox([{}]);
+  setRoute('signIn');
+  setIsSignedIn(false);
+  setUser({id:"",
+  name: "",
+  email: "",
+  entries: 0,
+  joined: ""
+  });
+}
+
+const smartBrainApi="https://infinite-plateau-30747-fc90e8256432.herokuapp.com";  
+
 //  let IMAGE_URL = 'https://samples.clarifai.com/metro-north.jpg';
 
 const loadUser = (data) => {
-  console.log('load user', data);
+
 setUser({id: data.id,
   name:data.name,
   email: data.email,
@@ -52,31 +61,6 @@ useEffect(() => {
 },[]);
 
 
-const clarifaiSetup = (url) => {
-  const raw = JSON.stringify({
-    "user_app_id": {
-        "user_id": USER_ID,
-        "app_id": APP_ID
-    },
-    "inputs": [
-        {
-            "data": {
-                "image": {
-                    "url": url
-                }
-            }
-        }
-    ]
-  });
-  return  {
-    method: 'POST',
-    headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Key ' + PAT
-    },
-    body: raw
-  };
-}
 
  
  const onInputChange = (event) =>  {
@@ -110,7 +94,7 @@ const calculatefacelocation =(data) => {
               rightCol: width-(newbox.right_col *width),   
               bottomRow: height- (newbox.bottom_row * height)  }
               arrayBox.push(box);
-              console.log('array box',arrayBox);
+             // console.log('array box',arrayBox);
           }
          
           return arrayBox;
@@ -142,10 +126,16 @@ const displayFaceBox = (box) => {
 
 const  getAIAttributesForImage = async () => {
   try {
-    fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", clarifaiSetup(input))
+    fetch(`${smartBrainApi}/clarifai`, {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            input: input
+    })
+  })
     .then(response => {
       if (response.ok) {
-        fetch('http://localhost:3000/image', {
+        fetch(`${smartBrainApi}/image`, {
           method: 'put',
           headers: { 'Content-Type': 'application/json'},
           body: JSON.stringify({
@@ -193,13 +183,12 @@ const onImageLoaded = (event) =>
  }
 
 const onRouteChange = (route) => {
-  if (route==='home')
+  if (route==='signOut')
   {
+    resetState();
+    console.log('resetstate');
+  }else if(route==='home') {
     setIsSignedIn(true);
-  }
-  else
-  {
-    setIsSignedIn(false)
   }
   setRoute(route);
 }
@@ -207,18 +196,19 @@ const onRouteChange = (route) => {
   return (
     <div className="App">
       <ParticlesBg type='circle' bg={true} />
+      <Navigation isSignedIn={isSignedIn} onRouteChange={onRouteChange} />
       {route ==='home' ?
       <div>
-      <Navigation isSignedIn={isSignedIn} onRouteChange={onRouteChange} />
       <Logo />
       <Rank userName={user.name} userEntries={user.entries} />
       <ImageLinkForm onInputChange={onInputChange} onSubmit={onSubmit} onCopyPasteInput={onCopyPasteInput} />
       <FaceRecognitionComponent imageLoaded={onImageLoaded} box={box} imageSource={imageUrl} />
       </div> 
       : (route === 'signIn') ?
-      <SignIn loadUser={loadUser} onRouteChange={onRouteChange} />
+
+      <SignIn smartBrainApi={smartBrainApi} loadUser={loadUser} onRouteChange={onRouteChange} />
       :
-      <Register onRouteChange={onRouteChange} />
+      <Register smartBrainApi={smartBrainApi} onRouteChange={onRouteChange} />
       }
     
     </div>

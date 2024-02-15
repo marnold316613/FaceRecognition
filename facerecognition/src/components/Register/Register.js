@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import './Register.css'
 
-const Register = ({onRouteChange}) => {
+const Register = ({onRouteChange,smartBrainApi}) => {
 const [emailRegister,setEmail] = useState('');
 const [passwordRegister, setPassword] = useState('');
 const [nameRegister,setName] = useState('');
@@ -17,7 +17,7 @@ const onNameChange = (event) => {
   setName(event.target.value);
 } 
 const onSubmitRegister = () => {
-  fetch('http://localhost:3000/register', {
+  fetch(`${smartBrainApi}/register`, {
     method: 'post',
     headers: { 'Content-Type': 'application/json'},
     body: JSON.stringify({
@@ -65,6 +65,9 @@ const onSubmitRegister = () => {
               <div className="">
                 <input onClick={onSubmitRegister}
                  className="pointer b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" type="submit" value="Register"/>
+              </div>
+              <div>
+                <p></p>
               </div>
             </div>
           </main>

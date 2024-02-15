@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './SignIn.css'
 
-const SignIn = ({onRouteChange, loadUser}) => {
+const SignIn = ({onRouteChange, loadUser, smartBrainApi}) => {
 const [emailSignIn,setEmail] = useState('');
 const [passwordSignIn, setPassword] = useState('');
 
@@ -14,7 +14,7 @@ const onPasswordChange = (event) => {
 }
 
 const  onSubmitSignIn =  () => {
-  fetch('http://localhost:3000/signin', {
+  fetch(`${smartBrainApi}/signin`, {
     method: 'post',
     headers: { 'Content-Type': 'application/json'},
     body: JSON.stringify({
