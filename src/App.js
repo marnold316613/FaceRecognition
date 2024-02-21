@@ -195,7 +195,7 @@ const onRouteChange = (route) => {
 
   return (
     <div className="App">
-      <ParticlesBg type='circle' bg={true} />
+      <ParticlesBg type='cobweb' bg={true} color={["#36454F"]}  />
       <Navigation isSignedIn={isSignedIn} onRouteChange={onRouteChange} />
       {route ==='home' ?
       <div>

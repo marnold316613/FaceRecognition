@@ -19,7 +19,7 @@ const ImageLinkForm = ({onInputChange, onSubmit, onCopyPasteInput} ) => {
 
     return (
         <div>
-            <p className='f3 b white'>
+            <p className='f2 b white' style={{textShadow:'1px 1px 2px black'}}>
                 {'This Magic Brain will detect faces in your pictures. Give it a try!'}
             </p>
             <div className='center'>
