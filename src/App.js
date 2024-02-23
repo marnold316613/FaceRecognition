@@ -42,7 +42,6 @@ const resetState = () => {
 
 const smartBrainApi=process.env.REACT_APP_SMARTBRAINAPI;
 
-console.log('api', smartBrainApi);
 
 const loadUser = (data) => {
 
