@@ -1,15 +1,21 @@
-import cn from 'classnames'
 import { useFormContext } from 'react-hook-form';
 import {MdError} from 'react-icons/md';
 import { findInputError, isFormInvalid } from '../../utils';
 
-const Input = ({ label, type, id, placeholder,validation,name }) => {
+const Input = ({ label, type, id, placeholder,validation,name, allowSpaces }) => {
   const  {register,
   formState: {errors}
   } = useFormContext();
   
   const inputError = findInputError(errors, name)
   const isInvalid = isFormInvalid(inputError)
+
+  const handelKeyDown = e => {
+    if (allowSpaces) { return;}
+    if (e.key===" ") {
+      e.preventDefault();
+    }
+  };
 
   return (
     <div className="flex flex-column w-100 pa1">
@@ -30,6 +36,7 @@ const Input = ({ label, type, id, placeholder,validation,name }) => {
         className="w-100 pa2 fw-m ba br3"
         placeholder={placeholder}
         {...register(name, validation)}
+        onKeyDown={handelKeyDown}
       />
     </div>
   )

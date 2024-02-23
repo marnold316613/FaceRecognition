@@ -38,9 +38,9 @@ const resetState = () => {
   });
 }
 
-const smartBrainApi="https://infinite-plateau-30747-fc90e8256432.herokuapp.com";  
 
-//  let IMAGE_URL = 'https://samples.clarifai.com/metro-north.jpg';
+
+const smartBrainApi=process.env.REACT_APP_SMARTBRAINAPI;
 
 const loadUser = (data) => {
 
@@ -51,7 +51,6 @@ setUser({id: data.id,
   joined: data.joined
 
 });
-console.log('user loaded', user)
 }
 
 useEffect(() => {
@@ -64,12 +63,10 @@ useEffect(() => {
 
  
  const onInputChange = (event) =>  {
-  console.log('onInputChange', event.target.value);
   setInput(event.target.value);
  } 
 
  const onCopyPasteInput = (url) => {
-  console.log('onCopyPaste',url);
   setInput(url);
  }
 

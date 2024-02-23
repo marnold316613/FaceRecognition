@@ -43,7 +43,7 @@ const onSubmitRegister = (emailRegister,passwordRegister,nameRegister) => {
               <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
                 <legend style={{width:"360px"}} className="f1 fw6 ph0 mh0">Register</legend>
                 <div >
-                  <Input {...name_validation}
+                  <Input {...name_validation} allowSpaces={true}
                   />
                 </div>
                 <div >

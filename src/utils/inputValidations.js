@@ -57,6 +57,10 @@ export const password_validation = {
       value: 3,
       message: 'min 3 characters',
     },
+    pattern: {
+      value: /^[^\s]+$/,
+      message: 'Spaces not allowed in password',
+    },
   },
 }
 
@@ -88,7 +92,7 @@ export const email_validation = {
     pattern: {
       value:
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-      message: 'not valid',
+      message: 'Not a valid email',
     },
   },
 }
